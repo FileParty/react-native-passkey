@@ -1,4 +1,16 @@
 
+# [3.1.2](https://github.com/mTRx0/react-native-passkey/compare/v3.1.1...v3.1.2) (2025-01-19)
+
+### Fixed
+- Updated React Native compatibility to 0.81.0
+- Fixed iOS UI window access for React Native 0.81+
+- Enhanced input validation for both iOS and Android
+- Updated iOS minimum version requirement to 15.0 (matching code requirements)
+- Improved error handling consistency across platforms
+
+### Changed
+- Updated package name to `bokcbdc-react-native-passkey`
+- Enhanced Bridging Header for better React Native 0.81 compatibility
 
 # [3.1.0](https://github.com/f-23/react-native-passkey/compare/v3.0.0...v3.1.0) (2025-01-14)
 

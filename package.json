@@ -1,6 +1,6 @@
 {
   "name": "bokcbdc-react-native-passkey",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Passkey implementation for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
