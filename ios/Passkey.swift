@@ -22,11 +22,20 @@ class Passkey: NSObject, RNPasskeyResultHandler {
    */
   @objc(create:withForcePlatformKey:withForceSecurityKey:withResolver:withRejecter:)
   func create(_ request: String, forcePlatformKey: Bool, forceSecurityKey: Bool, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    // Input validation
+    if request.isEmpty {
+      reject("InvalidRequest", "Request JSON cannot be empty", nil)
+      return
+    }
+    
     do {
       passkeyHandler = RNPasskeyHandler(resolve, reject);
       
       // Decode request object
-      let requestData = request.data(using: .utf8)!;
+      guard let requestData = request.data(using: .utf8) else {
+        handleError(RNPasskeyError(type: .invalidChallenge, message: "Invalid UTF-8 encoding"));
+        return;
+      }
       let requestJSON = try JSONDecoder().decode(RNPasskeyCredentialCreationOptions.self, from: requestData);
       
       // Convert challenge to Data
@@ -66,11 +75,20 @@ class Passkey: NSObject, RNPasskeyResultHandler {
    */
   @objc(get:withForcePlatformKey:withForceSecurityKey:withResolver:withRejecter:)
   func get(_ request: String, forcePlatformKey: Bool, forceSecurityKey: Bool, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) -> Void {
+    // Input validation
+    if request.isEmpty {
+      reject("InvalidRequest", "Request JSON cannot be empty", nil)
+      return
+    }
+    
     do {
       passkeyHandler = RNPasskeyHandler(resolve, reject);
       
       // Decode request object
-      let requestData = request.data(using: .utf8)!;
+      guard let requestData = request.data(using: .utf8) else {
+        handleError(RNPasskeyError(type: .invalidChallenge, message: "Invalid UTF-8 encoding"));
+        return;
+      }
       let requestJSON = try JSONDecoder().decode(RNPasskeyCredentialRequestOptions.self, from: requestData);
       
       // Convert challenge to Data
@@ -94,7 +112,7 @@ class Passkey: NSObject, RNPasskeyResultHandler {
       passkeyDelegate.performAuthForController(controller: authController);
       
     } catch let error as NSError {
-      reject(error.debugDescription, error.debugDescription, nil);
+      handleError(handleErrorCode(error: error));
     }
   }
   

@@ -25,11 +25,15 @@ class PasskeyDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizat
   }
   
   func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-    return UIApplication
-      .shared
-      .connectedScenes
-      .compactMap { ($0 as? UIWindowScene)?.keyWindow }
-      .last ?? ASPresentationAnchor()
+    // React Native 0.81 compatible approach
+    if let windowScene = UIApplication.shared.connectedScenes
+        .compactMap({ $0 as? UIWindowScene })
+        .first(where: { $0.activationState == .foregroundActive }) {
+      return windowScene.windows.first { $0.isKeyWindow } ?? windowScene.windows.first ?? ASPresentationAnchor()
+    }
+    
+    // Fallback for older approaches
+    return UIApplication.shared.windows.first { $0.isKeyWindow } ?? UIApplication.shared.windows.first ?? ASPresentationAnchor()
   }
   
   func authorizationController(
